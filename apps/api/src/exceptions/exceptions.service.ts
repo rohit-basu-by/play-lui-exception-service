@@ -12,9 +12,7 @@ export class ExceptionsService {
     constructor(@InjectModel('Exception') private exceptionModel: Model<Exception>) { }
 
     async findAll(limit: number, tenantId: string): Promise<Exception[]> {
-        return this.exceptionModel.find({
-            TENANT_ID: tenantId
-        }).sort({ CREATED_DATE: "desc" }).limit(limit).exec();
+        return this.exceptionModel.find({TENANT_ID:tenantId},{},{ limit: limit}).exec();
     }
     // async findAndCountAll(limit: number,tenatId:any): Promise<any> {
     //     return await this.exceptionsRepository.findAndCountAll({
