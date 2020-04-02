@@ -11,18 +11,6 @@ export class ExceptionsService {
 
     constructor(@InjectModel('Exception') private exceptionModel: Model<Exception>) { }
 
-
-
-    // async findAll(limit: number,tenatId:any): Promise<Exception[]> {
-    //     return this.exceptionsRepository.findAll<Exception>({
-    //         where: {
-    //           TENANT_ID: tenatId,
-    //           DELETED_BY: ""
-    //         },
-    //         order: sequelize.literal("CREATED_DATE DESC"),
-    //         limit: limit
-    //       });
-    // }
     async findAll(limit: number, tenantId: string): Promise<Exception[]> {
         return this.exceptionModel.find({
             TENANT_ID: tenantId
@@ -41,7 +29,7 @@ export class ExceptionsService {
     //     );
     // }
 
-    async createException(exception: CreateExceptionDto): Promise<any> {
+    async createException(exception: CreateExceptionDto): Promise<Exception> {
         exception.READ_BY = "";
         exception.DELETED_BY = "";
         const createdException = new this.exceptionModel(exception);
