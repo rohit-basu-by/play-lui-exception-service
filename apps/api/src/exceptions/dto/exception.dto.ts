@@ -24,11 +24,11 @@ export class CreateExceptionDto {
     @IsNumber()
     SEVERITY: number;
     REFERENCE_ID: string;
-    EXCEPTION_TYPE: string;
-    SUBTITILE: string;
-    CREATED_AT: Date;
-    UPDATED_AT: Date;
+    REF_TYPE: string;
+    NAV_PROPS: string;
+    SUB_TITLE: string;
+    CREATED_DATE: Date;
+    LAST_MODIFIED_DATE: Date;
     READ_BY: string;
     DELETED_BY: string;
-
 }
