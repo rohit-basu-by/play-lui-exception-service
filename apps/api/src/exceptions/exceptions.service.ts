@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Exception } from '@jda/db-provider';
 import { plainToClass } from 'class-transformer';
 import { CreateExceptionDto } from './dto/exception.dto';
+import sequelize = require('sequelize');
 
 @Injectable()
 export class ExceptionsService {
@@ -9,11 +10,27 @@ export class ExceptionsService {
     constructor(
         @Inject('EXCEPTIONS_REPOSITORY') private readonly exceptionsRepository: typeof Exception) { }
 
-    async findAll(): Promise<Exception[]> {
-        return this.exceptionsRepository.findAll<Exception>();
+    async findAll(limit: number,tenatId:any): Promise<Exception[]> {
+        return this.exceptionsRepository.findAll<Exception>({
+            where: {
+              TENANT_ID: tenatId,
+              DELETED_BY: ""
+            },
+            order: sequelize.literal("CREATED_DATE DESC"),
+            limit: limit
+          });
     }
-    async findAndCountAll(): Promise<any> {
-        return await this.exceptionsRepository.findAndCountAll();
+    async findAndCountAll(limit: number,tenatId:any): Promise<any> {
+        return await this.exceptionsRepository.findAndCountAll({
+            where: {
+              TENANT_ID: tenatId,
+              DELETED_BY: ""
+            },
+            order: sequelize.literal("CREATED_DATE DESC"),
+            limit: limit
+          }
+
+        );
     }
 
     async createException(exception: CreateExceptionDto): Promise<any> {
