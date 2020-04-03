@@ -1,8 +1,22 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ExceptionsModule } from './exceptions/exceptions.module';
 import { MongooseModule } from '@nestjs/mongoose';
-
+const PROD_ENV = 'production';
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://plat-mongo:aEhcXTUcZC4Nv3A9crmVOeuw1F5HTKig4Oinv6BFlvjgpCIjs1OiYGWJ0D56hvrubNIiIF1fy5adoEZZIU6r6Q%3D%3D@plat-mongo.mongo.cosmos.azure.com:10255/?ssl=true&appName=@plat-mongo@'), ExceptionsModule],
+  imports: [
+    ConfigModule.forRoot({
+      expandVariables: true,
+      ignoreEnvFile: process.env.NODE_ENV === PROD_ENV
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get('MONGODB_URI'),
+      }),
+      inject: [ConfigService],
+    }),
+    ExceptionsModule
+  ],
 })
 export class AppModule {}
