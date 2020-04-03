@@ -32,3 +32,7 @@ export class CreateExceptionDto {
     READ_BY: string;
     DELETED_BY: string;
 }
+
+export class CreateExceptionResponse {
+    _id: string;
+}

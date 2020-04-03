@@ -1,7 +1,7 @@
 import { ExceptionCountResponseDto } from './dto/exception.count.dto';
 import { Controller, Get, Post, Body, Patch, Param, Put, Query } from '@nestjs/common';
 import { ExceptionsService } from './exceptions.service';
-import { CreateExceptionDto } from './dto/exception.dto';
+import { CreateExceptionDto, CreateExceptionResponse } from './dto/exception.dto';
 import { Exception } from './exception.interface';
 
 const mock_tenant_id = '1144ffe9-abca-474f-b41e-79c442166d31';
@@ -28,8 +28,11 @@ export class ExceptionsController {
         }
     }
     @Post()
-    async create(@Body() exception: CreateExceptionDto): Promise<string> {
-        return await this.exceptionService.createException(exception)
+    async create(@Body() exception: CreateExceptionDto): Promise<CreateExceptionResponse> {
+        const _id = await this.exceptionService.createException(exception)
+        return {
+            _id
+        }
     }
 
 }

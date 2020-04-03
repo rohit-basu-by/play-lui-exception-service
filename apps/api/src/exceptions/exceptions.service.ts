@@ -42,7 +42,7 @@ export class ExceptionsService {
         exception.READ_BY = "";
         exception.DELETED_BY = "";
         const createdException = new this.exceptionModel(exception);
-        const {_id} = await createdException.save();
+        const { _id } = await createdException.save();
         return _id;
     }
 
