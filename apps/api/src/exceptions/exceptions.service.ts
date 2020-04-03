@@ -15,6 +15,7 @@ export class ExceptionsService {
         const options: PaginateOptions = {
             page: pageNo,
             limit: limit,
+            sort: {_id: -1}
           };
 
         // return this.exceptionModel.find(
