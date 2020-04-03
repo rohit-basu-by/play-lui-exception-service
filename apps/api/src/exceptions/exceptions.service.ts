@@ -3,7 +3,7 @@ import { plainToClass } from 'class-transformer';
 import { CreateExceptionDto } from './dto/exception.dto';
 import sequelize = require('sequelize');
 import { InjectModel } from '@nestjs/mongoose';
-import { PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
 import { Exception } from './exception.interface';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class ExceptionsService {
 
     constructor(@InjectModel('Exception') private exceptionModel: PaginateModel<Exception>) { }
 
-    async findAll(pageNo:number,limit: number, tenantId: string): Promise<any> {
+    async findAll(pageNo:number,limit: number, tenantId: string): Promise<PaginateResult<Exception>> {
         const options: PaginateOptions = {
             page: pageNo,
             limit: limit,
