@@ -12,20 +12,20 @@ export class ExceptionsService {
     constructor(@InjectModel('Exception') private exceptionModel: Model<Exception>) { }
 
     async findAll(limit: number, tenantId: string): Promise<Exception[]> {
-        return this.exceptionModel.find({TENANT_ID:tenantId},{},{ limit: limit}).exec();
+        return this.exceptionModel.find(
+            {
+                TENANT_ID: tenantId,
+                DELETED_BY: ""
+            }
+        ).limit(limit).sort({_id: -1}).exec();
     }
-    // async findAndCountAll(limit: number,tenatId:any): Promise<any> {
-    //     return await this.exceptionsRepository.findAndCountAll({
-    //         where: {
-    //           TENANT_ID: tenatId,
-    //           DELETED_BY: ""
-    //         },
-    //         order: sequelize.literal("CREATED_DATE DESC"),
-    //         limit: limit
-    //       }
-
-    //     );
-    // }
+    async findAndCountAll(limit: number,tenantId:string): Promise<any> {
+        return await this.exceptionModel.countDocuments({
+            TENANT_ID: tenantId,
+            DELETED_BY: ""
+        }
+        ).limit(limit).sort({_id: -1}).exec();
+    }
 
     async createException(exception: CreateExceptionDto): Promise<Exception> {
         exception.READ_BY = "";
