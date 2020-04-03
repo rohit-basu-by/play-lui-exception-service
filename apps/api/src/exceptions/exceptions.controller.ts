@@ -6,16 +6,17 @@ import { Exception } from './exception.interface';
 
 const mock_tenant_id = '1144ffe9-abca-474f-b41e-79c442166d31';
 const defaultLimitResultSet = "5";
-
+const defaultPageNo = "1";
 @Controller('exceptions')
 export class ExceptionsController {
     constructor(private readonly exceptionService: ExceptionsService) { }
 
      @Get('/')
-     async getAll(@Query('limit') limit: string = defaultLimitResultSet): Promise<Exception[]> {
+     async getAll(@Query('pageNo') pageNo:string = defaultPageNo,@Query('limit') limit: string = defaultLimitResultSet): Promise<any> {
          const parsedlimit = parseInt(limit);
+         const parsedPageNo = parseInt(pageNo);
          const tenantId = mock_tenant_id;
-         return await this.exceptionService.findAll(parsedlimit,tenantId);
+         return await this.exceptionService.findAll(parsedPageNo,parsedlimit,tenantId);
      }
     @Get('/count')
     async getCount(@Query('limit') limit: string = defaultLimitResultSet): Promise<ExceptionCountResponseDto> {

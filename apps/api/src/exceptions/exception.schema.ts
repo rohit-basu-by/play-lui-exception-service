@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import * as mongoosePaginate from 'mongoose-paginate-v2';
 mongoose.set('debug', true);
 
 export const ExceptionSchema = new mongoose.Schema({
@@ -18,3 +19,5 @@ export const ExceptionSchema = new mongoose.Schema({
     CREATED_DATE: Date,
     LAST_MODIFIED_DATE: Date
 }, { timestamps: { createdAt: 'CREATED_DATE', updatedAt: 'LAST_MODIFIED_AT' } });
+
+ExceptionSchema.plugin(mongoosePaginate);

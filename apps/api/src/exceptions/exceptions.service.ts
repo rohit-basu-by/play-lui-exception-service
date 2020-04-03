@@ -3,21 +3,27 @@ import { plainToClass } from 'class-transformer';
 import { CreateExceptionDto } from './dto/exception.dto';
 import sequelize = require('sequelize');
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { PaginateModel, PaginateOptions } from 'mongoose';
 import { Exception } from './exception.interface';
 
 @Injectable()
 export class ExceptionsService {
 
-    constructor(@InjectModel('Exception') private exceptionModel: Model<Exception>) { }
+    constructor(@InjectModel('Exception') private exceptionModel: PaginateModel<Exception>) { }
 
-    async findAll(limit: number, tenantId: string): Promise<Exception[]> {
-        return this.exceptionModel.find(
-            {
-                TENANT_ID: tenantId,
-                DELETED_BY: ""
-            }
-        ).limit(limit).sort({_id: -1}).exec();
+    async findAll(pageNo:number,limit: number, tenantId: string): Promise<any> {
+        const options: PaginateOptions = {
+            page: pageNo,
+            limit: limit,
+          };
+
+        // return this.exceptionModel.find(
+        //     {
+        //         TENANT_ID: tenantId,
+        //         DELETED_BY: ""
+        //     }
+        // ).limit(limit).sort({_id: -1}).exec();
+        return await this.exceptionModel.paginate({},options)
     }
     async findAndCountAll(limit: number,tenantId:string): Promise<any> {
         return await this.exceptionModel.countDocuments({

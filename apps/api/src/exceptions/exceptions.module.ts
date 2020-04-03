@@ -6,7 +6,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ExceptionSchema } from 'apps/api/src/exceptions/exception.schema';
  
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'Exception', schema: ExceptionSchema }])],  
+  imports: [
+    MongooseModule.forFeature([
+      { name: 'Exception', schema: ExceptionSchema }
+    ])
+  ], 
+   
   controllers: [ExceptionsController],
   providers: [ExceptionsService]
 })
