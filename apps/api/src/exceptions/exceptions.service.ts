@@ -8,14 +8,18 @@ import { Exception } from './exception.interface';
 
 @Injectable()
 export class ExceptionsService {
-
+    private readonly paginationResponseLabel = {
+        totalDocs: 'total',
+        docs: 'data'
+      };
     constructor(@InjectModel('Exception') private exceptionModel: PaginateModel<Exception>) { }
-
+    
     async findAll(pageNo:number,limit: number, tenantId: string): Promise<PaginateResult<Exception>> {
-        const options: PaginateOptions = {
+        const options  = {
             page: pageNo,
             limit: limit,
-            sort: {_id: -1}
+            sort: {_id: -1},
+            customLabels: this.paginationResponseLabel
           };
 
         // return this.exceptionModel.find(
