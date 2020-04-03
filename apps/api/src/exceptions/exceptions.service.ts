@@ -11,13 +11,22 @@ export class ExceptionsService {
 
     constructor(@InjectModel('Exception') private exceptionModel: Model<Exception>) { }
 
-    async findAll(limit: number, tenantId: string): Promise<Exception[]> {
-        return this.exceptionModel.find(
-            {
-                TENANT_ID: tenantId,
-                DELETED_BY: ""
+    async findAll(pageNo:number,limit: number, tenantId: string): Promise<any> {
+        const options = {
+            page: pageNo,
+            limit: limit,
+            collation: {
+              locale: 'en'
             }
-        ).limit(limit).sort({_id: -1}).exec();
+          };
+
+        // return this.exceptionModel.find(
+        //     {
+        //         TENANT_ID: tenantId,
+        //         DELETED_BY: ""
+        //     }
+        // ).limit(limit).sort({_id: -1}).exec();
+        return await Exception.paginate
     }
     async findAndCountAll(limit: number,tenantId:string): Promise<any> {
         return await this.exceptionModel.countDocuments({

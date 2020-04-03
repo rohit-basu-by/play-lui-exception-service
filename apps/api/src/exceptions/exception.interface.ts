@@ -1,6 +1,9 @@
 import { Document } from 'mongoose';
 
-export interface Exception extends Document {
+interface IPpaginator {
+    paginate(): void;
+}
+export interface Exception extends Document, IPpaginator {
     readonly _id: string;
     readonly TENANT_ID: string,
     readonly SOURCE_ID: string,
