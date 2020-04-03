@@ -23,7 +23,11 @@ export class ExceptionsService {
         //         DELETED_BY: ""
         //     }
         // ).limit(limit).sort({_id: -1}).exec();
-        return await this.exceptionModel.paginate({},options)
+        return await this.exceptionModel.paginate({
+            TENANT_ID: tenantId,
+            DELETED_BY: "",
+        
+        },options)
     }
     async findAndCountAll(limit: number,tenantId:string): Promise<any> {
         return await this.exceptionModel.countDocuments({
