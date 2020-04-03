@@ -3,7 +3,7 @@ import { plainToClass } from 'class-transformer';
 import { CreateExceptionDto } from './dto/exception.dto';
 import sequelize = require('sequelize');
 import { InjectModel } from '@nestjs/mongoose';
-import { PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
 import { Exception } from './exception.interface';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class ExceptionsService {
 
     constructor(@InjectModel('Exception') private exceptionModel: PaginateModel<Exception>) { }
 
-    async findAll(pageNo:number,limit: number, tenantId: string): Promise<any> {
+    async findAll(pageNo:number,limit: number, tenantId: string): Promise<PaginateResult<Exception>> {
         const options: PaginateOptions = {
             page: pageNo,
             limit: limit,
@@ -30,7 +30,7 @@ export class ExceptionsService {
         
         },options)
     }
-    async findAndCountAll(limit: number,tenantId:string): Promise<any> {
+    async findAndCountAll(limit: number,tenantId:string): Promise<number> {
         return await this.exceptionModel.countDocuments({
             TENANT_ID: tenantId,
             DELETED_BY: ""
@@ -38,11 +38,12 @@ export class ExceptionsService {
         ).limit(limit).sort({_id: -1}).exec();
     }
 
-    async createException(exception: CreateExceptionDto): Promise<Exception> {
+    async createException(exception: CreateExceptionDto): Promise<string> {
         exception.READ_BY = "";
         exception.DELETED_BY = "";
         const createdException = new this.exceptionModel(exception);
-        return createdException.save();
+        const {_id} = await createdException.save();
+        return _id;
     }
 
     // async updateException(exception: CreateExceptionDto): Promise<any> {

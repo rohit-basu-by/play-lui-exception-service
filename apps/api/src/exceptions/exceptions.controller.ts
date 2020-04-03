@@ -28,7 +28,7 @@ export class ExceptionsController {
         }
     }
     @Post()
-    async create(@Body() exception: CreateExceptionDto): Promise<Exception> {
+    async create(@Body() exception: CreateExceptionDto): Promise<string> {
         return await this.exceptionService.createException(exception)
     }
 
