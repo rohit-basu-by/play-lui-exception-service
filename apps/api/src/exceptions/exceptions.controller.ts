@@ -1,7 +1,7 @@
 import { ExceptionCountResponseDto } from './dto/exception.count.dto';
 import { Controller, Get, Post, Body, Patch, Param, Put, Query, UseInterceptors } from '@nestjs/common';
 import { ExceptionsService } from './exceptions.service';
-import { CreateExceptionDto } from './dto/exception.dto';
+import { CreateExceptionDto, CreateExceptionResponse } from './dto/exception.dto';
 import { Exception } from './exception.interface';
 import { PaginateResult } from 'mongoose';
 
@@ -13,12 +13,11 @@ export class ExceptionsController {
     constructor(private readonly exceptionService: ExceptionsService) { }
 
      @Get('/')
-     async getAll(@Query('pageNo') pageNo:string = defaultPageNo,@Query('limit') limit: string = defaultLimitResultSet): Promise<{ totalDocs: number; resource: PaginateResult<Exception> }> {
+     async getAll(@Query('pageNo') pageNo:string = defaultPageNo,@Query('limit') limit: string = defaultLimitResultSet): Promise<PaginateResult<Exception>> {
          const parsedlimit = parseInt(limit);
          const parsedPageNo = parseInt(pageNo);
          const tenantId = mock_tenant_id;
-         const data: PaginateResult<Exception> = await this.exceptionService.findAll(parsedPageNo,parsedlimit,tenantId);
-         return { totalDocs: data.total, resource: data };
+         return await this.exceptionService.findAll(parsedPageNo,parsedlimit,tenantId);
      }
     @Get('/count')
     async getCount(@Query('limit') limit: string = defaultLimitResultSet): Promise<ExceptionCountResponseDto> {
@@ -30,8 +29,11 @@ export class ExceptionsController {
         }
     }
     @Post()
-    async create(@Body() exception: CreateExceptionDto): Promise<Exception> {
-        return await this.exceptionService.createException(exception)
+    async create(@Body() exception: CreateExceptionDto): Promise<CreateExceptionResponse> {
+        const _id = await this.exceptionService.createException(exception)
+        return {
+            _id
+        }
     }
 
 }
