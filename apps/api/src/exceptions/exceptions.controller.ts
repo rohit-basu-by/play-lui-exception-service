@@ -4,6 +4,7 @@ import { ExceptionsService } from './exceptions.service';
 import { CreateExceptionDto, CreateExceptionResponse } from './dto/exception.dto';
 import { Exception } from './exception.interface';
 import { PaginateResult } from 'mongoose';
+import { LocationHeaderInterceptor } from './interceptors';
 
 const mock_tenant_id = '1144ffe9-abca-474f-b41e-79c442166d31';
 const defaultLimitResultSet = "5";
@@ -29,6 +30,7 @@ export class ExceptionsController {
         }
     }
     @Post()
+    @UseInterceptors(new LocationHeaderInterceptor<CreateExceptionResponse>())
     async create(@Body() exception: CreateExceptionDto): Promise<CreateExceptionResponse> {
         const _id = await this.exceptionService.createException(exception)
         return {
